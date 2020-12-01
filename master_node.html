@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>燃烧挖矿-内测</title>
+    <meta name="viewport"
+        content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style type="text/css">
+    body .mui-content{
+	background: #f4f5f7;
+}
+
+.dapp-list{
+	margin:15px 0;
+	overflow: hidden;
+}
+.dapp-list .list-item{
+	width:20%;
+	float:left;
+	padding:0 10px;
+	text-align: center;
+	color:#666;
+	word-wrap:break-word;
+	margin-bottom:5px;	
+}
+.dapp-list .list-item img{
+	border-radius: 10px;
+}
+.dapp-list .list-item .app_name{
+	height:22px;
+	overflow: hidden;
+	font-size:12px;
+}
+.my-dapp{
+	padding:0 10px;
+	display: flex;
+	align-items:center;
+}
+.my-dapp .my-dapp-list{
+	width:20%;
+	padding:0 5px;
+	color:#666;
+	word-wrap:break-word;
+}
+.my-dapp .my-dapp-list img{
+	border-radius: 10px;
+	vertical-align:middle;
+}
+.my-dapp-box{
+	display: flex;
+}
+.my-dapp .my-dapp-list.my-more{
+	background: #fff;
+	border-radius: 10px;
+	padding:0;
+	margin:0 5px;
+	display: flex;
+	align-items:center;
+	justify-content:center;
+}
+.my-dapp .my-dapp-list.my-more .iconfont{
+	font-size:40px;
+	color:#bdbdbd;
+}
+.app-list .app-list-cat{
+	display: flex;
+	padding:0 10px;
+	margin:20px 0;
+}
+.app-list .app-list-cat div{
+	margin-right:15px;
+}
+.app-list .app-list-cat div.app-cat-active{
+	color:#5873b5;
+	border-bottom: 2px solid #5873b5;
+}
+.app-list-data{
+	padding:0 10px;
+}
+.app-list-data .app-list-data-item{
+	background: #fff;
+	border-radius: 10px;
+	padding:10px;
+	display: flex;
+	align-items:center;
+	margin-bottom:10px;
+}
+.app-list-data .app-list-data-item img{
+	width:60px;
+	margin-right:15px;
+	border-radius: 10px;
+	vertical-align:middle;
+}
+.app-list-data .app-list-data-item p{
+	margin:0;
+	font-size:14px;
+}
+.app-list-data .app-list-data-item p.app-title{
+	color:#000;
+	font-weight: bold;
+}
+.app-list-data .app-more{
+	margin-left:auto
+}
+.app-list-data .app-more .icon-more{
+	font-size:30px;
+	color:#aaa;
+}
+        .box {
+            padding: 20px 20px;
+        }
+
+        .mui-table-view:before {
+            height: 0;
+        }
+
+        .mui-table-view:after {
+            height: 0;
+        }
+
+        .mui-table-view-cell:after {
+            height: 0 !important;
+        }
+
+        .mui-table-view-cell.mui-active {
+            background: none !important;
+        }
+
+        .mui-navigate-right.mui-active {
+            background: none !important;
+        }
+
+        .mui-table-view-cell.mui-collapse .mui-collapse-content {
+            background: none !important;
+        }
+
+        .table-box {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .mui-collapse-content .title {
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .item {
+            margin-top: 10px;
+        }
+
+        .item .text {
+            font-size: 14px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .item .text span {
+            color: red;
+        }
+
+        .item input {
+            margin-top: 10px;
+            border: 1px solid rgba(0, 0, 0, .1);
+        }
+
+        .btn {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mui-navigate-right {
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body class="manage-wallet-page">
+
+    <header class="mui-bar mui-bar-nav app-header-1" id="header">
+        <a class="mui-action-back mui-icon icon iconfont icon-return mui-pull-left"></a>
+        <h1 class="mui-title">主节点管理</h1>
+    </header>
+
+    <div id="content" class="mui-content">
+        <div class="mui-scroll">
+            <div class="box">
+
+
+                <ul class="mui-table-view table-box">
+
+                    <li class="mui-table-view-cell mui-collapse">
+                        <div class="mui-input-row">
+                            <label>钱包地址</label>
+                            <input type="text" class="mui-input-clear" v-model="address" placeholder="请输入内容">
+                        </div>
+                    </li>
+
+                    <li class="mui-table-view-cell mui-collapse" v-for="method in abi"
+                        v-if="!method.constant && method.type == 'function'">
+                        <a class="mui-navigate-right" href="#">{{method.zh_name}}</a>
+                        <div class="mui-collapse-content" v:id="input.name" v-if="method.inputs">
+                            <div class="item" v-for="input in method.inputs">
+                                <p class="text">{{input.name}}<span>*</span></p>
+                                <input type="text" v-model="item[method.name][input.name]" v:placeholder="input.name" />
+                            </div>
+                            <button type="button" class="mui-btn mui-btn-primary btn"
+                                v-on:click="dapp_method(method)">提交
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+<link href="https://cdn.bootcss.com/mui/3.7.1/css/mui.min.css" rel="stylesheet" />
+<script src="https://cdn.bootcss.com/mui/3.7.1/js/mui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"
+    integrity="sha256-KSlsysqp7TXtFo/FHjb1T9b425x3hrvzjMWaJyKbpcI=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.0.19/dist/ethers.umd.min.js"
+    integrity="sha256-wHr8FLbBdSYlXkSlLPgjYNYiL0H5xMWvWjXI38LM9jc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" crossorigin="anonymous"></script>
+<script>
+    var address = "";
+    var assets_name = "";
+    abi = {};
+    contract_address = "0xC70eB368783eAE52Ab01710F85e4a9C1fabfFC4a"
+    if (typeof ethereum == "undefined") {
+        mui.confirm("请使用metamask或者qkpay打开本网站");
+    }
+    ethereum.enable()
+    let customHttpProvider = new ethers.providers.Web3Provider(ethereum);
+    let signer = customHttpProvider.getSigner();
+    abi =[ { "inputs": [ { "internalType": "address", "name": "new_node", "type": "address" } ], "name": "add_master_node", "zh_name":"新增节点", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [ { "internalType": "address", "name": "new_owner", "type": "address" } ], "name": "setOwner", "zh_name":"设置管理员", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [ { "internalType": "uint256", "name": "index", "type": "uint256" }, { "internalType": "address", "name": "new_node", "type": "address" } ], "name": "update_node", "zh_name":"更新节点", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "withdraw", "zh_name":"提现收益", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "anonymous": false, "inputs": [ { "indexed": true, "internalType": "address", "name": "src", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "wad", "type": "uint256" } ], "name": "Withdrawal", "type": "event" }, { "stateMutability": "payable", "type": "receive" }, { "inputs": [ { "internalType": "address", "name": "", "type": "address" } ], "name": "balanceOf", "zh_name":"查询收益", "outputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "master_nodes", "zh_name":"查询节点", "outputs": [ { "internalType": "address", "name": "", "type": "address" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "node_amount", "zh_name":"节点数量", "outputs": [ { "internalType": "uint256", "name": "amount", "type": "uint256" } ], "stateMutability": "view", "type": "function" } ];
+    item = {};
+    for (i = 0; i < abi.length; i++) {
+        item[abi[i]["name"]] = {};
+    }
+
+    let network = customHttpProvider.getNetwork()
+        .then(function (network) {
+            let networkVersion = network.chainId;
+            if (networkVersion != 20181205) {
+                mui.toast('你当前没有使用QKI主网，请切换主网为QKI');
+            }
+        }
+            , function (data) {
+                if (data.code == "INSUFFICIENT_FUNDS") {
+                    mui.toast("请检查矿工费是否充足");
+                }
+                else if (data.code == "INVALID_ARGUMENT") {
+                    mui.toast("转出数量异常");
+                }
+                else if (data.code == 4001) {
+                    mui.toast("用户取消");
+                }
+                else { mui.toast("错误代码:" + data.code); }
+            });
+
+
+    contract = new ethers.Contract(contract_address, abi, signer);
+    app = new Vue({
+        el: '#content',
+        data: {
+            message: 'Hello Vue!',
+            abi: abi,
+            item: item,
+            address: ""
+        },
+        methods: {
+            dapp_method: function (method) {
+
+
+                var fullCode = "contract." + method.name + "(";
+
+                for (i = 0; i < method.inputs.length; i++) {
+                    fullCode += "\"" + item[method.name][method.inputs[i].name] + "\",";
+                }
+                // if(fullCode.indexOf(",")>0)
+                // fullCode = fullCode.substr(0,fullCode.length-1);
+                fullCode
+                    += "{gasLimit: 200000, gasPrice: ethers.utils.parseUnits(\"100\", \"gwei\") }).then(function (data) {" +
+                    'if(data.code == "INSUFFICIENT_FUNDS") { mui.toast("请检查矿工费是否充足"); } else if(data.code == "INVALID_ARGUMENT") { mui.toast("转出数量异常"); }else if(data.code == 4001) { mui.toast("用户取消"); } else { mui.toast(data);  }' +
+                    '},function (data){ if(data.code == "INSUFFICIENT_FUNDS") { mui.toast("请检查矿工费是否充足"); } else if(data.code == "INVALID_ARGUMENT") { mui.toast("转出数量异常"); }else if(data.code == 4001) { mui.toast("用户取消"); } else { mui.toast("错误代码:"+data.code); }});';
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                try {
+                    script.appendChild(document.createTextNode(fullCode));
+                } catch (ex) {
+                    script.text = fullCode;
+                }
+                document.body.appendChild(script);
+            }
+        }
+    });
+
+    signer.getAddress().then(address => {
+        app.address = address;
+    });
+
+</script>
+
+</html>
